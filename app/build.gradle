@@ -3,6 +3,31 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
 
+ext.readBuildNumber = {
+    def versionPropsFile = file('version.properties')
+
+    if (versionPropsFile.canRead()) {
+        def versionProps = new Properties()
+        versionProps.load(new FileInputStream(versionPropsFile))
+        def code = versionProps['VERSION_CODE'].toInteger() + 1
+
+        versionProps['VERSION_CODE'] = code.toString()
+        versionProps.store(versionPropsFile.newWriter(), null)
+
+        return code
+    } else {
+        throw new GradleException("Could not read version.properties!")
+    }
+}
+
+ext {
+    versionMajor = "0"
+    versionMid = "1"
+    versionMinor = "0"
+
+    customBuildNumber = readBuildNumber()
+}
+
 android {
     compileSdkVersion 29
     buildToolsVersion "29.0.3"
@@ -11,8 +36,8 @@ android {
         applicationId "com.neoproduction.gasolinni"
         minSdkVersion 16
         targetSdkVersion 29
-        versionCode 1
-        versionName "1.0"
+        versionCode customBuildNumber
+        versionName "${versionMajor}.${versionMid}.${versionMinor}"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
@@ -30,6 +55,12 @@ android {
         }
     }
 
+    applicationVariants.all { variant ->
+        variant.outputs.all {
+            def appName = "gasolinni"
+            outputFileName = appName + "_v${variant.versionName}.${variant.versionCode}.apk"
+        }
+    }
 }
 
 dependencies {
