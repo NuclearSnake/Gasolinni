@@ -11,7 +11,14 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.google.android.material.tabs.TabLayoutMediator
+import com.neoproduction.gasolinni.data.RefuelDao
+import com.neoproduction.gasolinni.data.RefuelRoomDB
+import com.neoproduction.gasolinni.data.StationDao
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class MainActivity : AppCompatActivity() {
     // When requested, this adapter returns a DemoObjectFragment,
@@ -60,8 +67,23 @@ class StatisticFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        GlobalScope.launch {
+            updateText(view)
+        }
+    }
+
+    private suspend fun updateText(view: View) {
         val tv: TextView = view.findViewById(R.id.tvText)
-        tv.text = "Statistics"
+        val refuelDB = RefuelRoomDB.getDatabase(context!!)
+        val stationDao = refuelDB.stationDao()
+
+        val count = stationDao.getStationsCountAsync()
+
+        tv.text = "Statistics:\n\nSaved $count stations"
+    }
+
+    private suspend fun StationDao.getStationsCountAsync() = withContext(Dispatchers.IO) {
+        this@getStationsCountAsync.getStations().size
     }
 }
 
@@ -76,7 +98,22 @@ class HistoryFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        GlobalScope.launch {
+            updateText(view)
+        }
+    }
+
+    private suspend fun updateText(view: View) {
         val tv: TextView = view.findViewById(R.id.tvText)
-        tv.text = "History"
+        val refuelDB = RefuelRoomDB.getDatabase(context!!)
+        val refuelDao = refuelDB.refuelDao()
+
+        val count = refuelDao.getRefuelsCountAsync()
+
+        tv.text = "History:\n\nSaved $count refuels"
+    }
+
+    private suspend fun RefuelDao.getRefuelsCountAsync() = withContext(Dispatchers.IO) {
+        this@getRefuelsCountAsync.getRefuels().size
     }
 }
