@@ -1,6 +1,8 @@
 package com.neoproduction.gasolinni
 
+import android.app.Activity
 import android.os.Bundle
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.neoproduction.gasolinni.data.Refuel
 import com.neoproduction.gasolinni.data.RefuelRoomDB
@@ -17,38 +19,120 @@ class AddGasStationActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_gas_station)
 
-        tvText.text = "Building new station... please wait..."
+        btnDiscard.setOnClickListener {
+            setResult(Activity.RESULT_CANCELED)
+            finish()
+        }
 
-        GlobalScope.launch(Dispatchers.Main) {
-            doMockUpInserts()
+        btnSave.setOnClickListener {
+            GlobalScope.launch(Dispatchers.Main) {
+                insertRefuel()
+            }
         }
     }
 
-    suspend fun doMockUpInserts() {
+    class FieldsContainer(
+        val gps: String?,
+        val address: String?,
+        val supplier: String,
+        val fuel: String,
+        val amount: Int,
+        val price: Int
+    )
+
+    private fun tryParseFields(): FieldsContainer? {
+        val gps = ""
+        val address = etAddress.text.toString()
+        val supplier = etSupplier.text.toString()
+        val fuel = etFuel.text.toString()
+        val amount = etAmount.text.toString().toIntOrNull()
+        val price = etPrice.text.toString().toDoubleOrNull()
+
+        var errorMessage: String? = null
+        // TODO: Error indication with positioning on editText with the error
+        if (address.isBlank() && gps.isBlank())
+            errorMessage = "No address provided"
+        else if (supplier.isBlank())
+            errorMessage = "Supplier not specified"
+        else if (fuel.isBlank())
+            errorMessage = "Fuel not specified"
+        else if (amount == null)
+            errorMessage = "Wrong amount"
+        else if (price == null)
+            errorMessage = "Incorrect price"
+
+        if (errorMessage != null) {
+            Toast.makeText(this, errorMessage, Toast.LENGTH_LONG).show()
+            return null
+        }
+
+        // amount and price can't be null here
+        return FieldsContainer(gps, address, supplier, fuel, amount!!, (price!! * 100).toInt())
+    }
+
+
+    private suspend fun insertRefuel() {
+        val fieldsContainer = tryParseFields() ?: return
+
         val refuelDB = RefuelRoomDB.getDatabase(this)
         val refuelDao = refuelDB.refuelDao()
         val stationDao = refuelDB.stationDao()
 
+        var stations: List<Station> = listOf()
         withContext(Dispatchers.IO) {
-            stationDao.insertStation(Station(1, null, "area 51"))
+            stations = stationDao.getStations()
+        }
+        var id = 0
+        for (station in stations) {
+            if (!fieldsContainer.gps.isNullOrBlank() && fieldsContainer.gps == station.gps) {
+                id = station.id
+                break
+            }
+
+            if (!fieldsContainer.address.isNullOrBlank() && fieldsContainer.address == station.textAddress) {
+                id = station.id
+                break
+            }
         }
 
-        tvText.append("\nStation built! Refueling...")
+        if (id == 0) {
+            withContext(Dispatchers.IO) {
+                id = stationDao.insertStation(
+                    Station(
+                        id,
+                        fieldsContainer.gps,
+                        fieldsContainer.address
+                    )
+                ).toInt()
+            }
+        }
 
+        var refuelID = -1
         withContext(Dispatchers.IO) {
             // 0 stands for not-set as ID
-            refuelDao.insertRefuel(
+            refuelID = refuelDao.insertRefuel(
                 Refuel(
                     0,
-                    1,
+                    id,
                     System.currentTimeMillis(),
-                    "Supplier X",
-                    "Alien 44",
-                    100,
-                    150
+                    fieldsContainer.supplier,
+                    fieldsContainer.fuel,
+                    fieldsContainer.amount,
+                    fieldsContainer.price
                 )
-            )
+            ).toInt()
         }
-        tvText.append("\nRefueled successfully! Ready to go!")
+
+        if (refuelID == -1) {
+            Toast.makeText(
+                this,
+                "Error while saving data. Please try again later",
+                Toast.LENGTH_LONG
+            ).show()
+        } else {
+            Toast.makeText(this, "Saved", Toast.LENGTH_LONG).show()
+            setResult(Activity.RESULT_OK)
+            finish()
+        }
     }
 }

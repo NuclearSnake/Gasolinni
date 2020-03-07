@@ -8,7 +8,7 @@ import androidx.room.Query
 @Dao
 interface RefuelDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertRefuel(refuel: Refuel)
+    fun insertRefuel(refuel: Refuel): Long
 
     @Query("SELECT * FROM refuel")
     fun getRefuels(): List<Refuel>

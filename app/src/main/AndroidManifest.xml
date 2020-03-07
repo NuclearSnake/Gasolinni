@@ -18,7 +18,8 @@
         </activity>
         <activity
             android:name=".AddGasStationActivity"
-            android:launchMode="singleInstance" />
+            android:launchMode="singleInstance"
+            android:windowSoftInputMode="adjustPan" />
     </application>
 
 </manifest>

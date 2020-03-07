@@ -8,7 +8,7 @@ import androidx.room.Query
 @Dao
 interface StationDao {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    fun insertStation(station: Station)
+    fun insertStation(station: Station): Long
 
     @Query("SELECT * FROM station")
     fun getStations(): List<Station>
