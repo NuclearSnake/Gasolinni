@@ -12,4 +12,7 @@ interface StationDao {
 
     @Query("SELECT * FROM station")
     fun getStations(): List<Station>
+
+    @Query("SELECT * FROM station WHERE gps = :gps AND text_address = :textAddress")
+    fun getStation(gps: String, textAddress: String): List<Station>
 }

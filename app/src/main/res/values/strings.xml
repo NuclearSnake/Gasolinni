@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Gasolinni</string>
+    <string name="placeh_price">%1.2f$</string>
+    <string name="placeh_amount">%1dL</string>
 </resources>

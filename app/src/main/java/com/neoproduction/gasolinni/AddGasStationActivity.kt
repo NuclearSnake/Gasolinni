@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.neoproduction.gasolinni.data.Refuel
 import com.neoproduction.gasolinni.data.RefuelRoomDB
 import com.neoproduction.gasolinni.data.Station
+import com.neoproduction.gasolinni.data.StationAddress
 import kotlinx.android.synthetic.main.activity_add_gas_station.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -78,31 +79,23 @@ class AddGasStationActivity : AppCompatActivity() {
         val refuelDao = refuelDB.refuelDao()
         val stationDao = refuelDB.stationDao()
 
-        var stations: List<Station> = listOf()
-        withContext(Dispatchers.IO) {
-            stations = stationDao.getStations()
-        }
+        val stationAddress = StationAddress(
+            fieldsContainer.gps ?: "",
+            fieldsContainer.address ?: ""
+        )
+
         var id = 0
-        for (station in stations) {
-            if (!fieldsContainer.gps.isNullOrBlank() && fieldsContainer.gps == station.gps) {
-                id = station.id
-                break
-            }
-
-            if (!fieldsContainer.address.isNullOrBlank() && fieldsContainer.address == station.textAddress) {
-                id = station.id
-                break
-            }
+        withContext(Dispatchers.IO) {
+            val stationsFound: List<Station> =
+                stationDao.getStation(stationAddress.gps, stationAddress.textAddress)
+            if (stationsFound.isNotEmpty())
+                id = stationsFound[0].id
         }
 
-        if (id == 0) {
+        if (id == 0) { // Not found
             withContext(Dispatchers.IO) {
                 id = stationDao.insertStation(
-                    Station(
-                        id,
-                        fieldsContainer.gps,
-                        fieldsContainer.address
-                    )
+                    Station(id, stationAddress) // id = 0 stands for auto_increment
                 ).toInt()
             }
         }
@@ -114,6 +107,7 @@ class AddGasStationActivity : AppCompatActivity() {
                 Refuel(
                     0,
                     id,
+                    stationAddress,
                     System.currentTimeMillis(),
                     fieldsContainer.supplier,
                     fieldsContainer.fuel,

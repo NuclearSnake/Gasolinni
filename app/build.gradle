@@ -22,8 +22,8 @@ ext.readBuildNumber = {
 
 ext {
     versionMajor = "0"
-    versionMid = "1"
-    versionMinor = "0"
+    versionMid = "3"
+    versionMinor = "2"
 
     customBuildNumber = readBuildNumber()
 }

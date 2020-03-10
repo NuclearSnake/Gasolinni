@@ -1,9 +1,6 @@
 package com.neoproduction.gasolinni.data
 
-import androidx.room.ColumnInfo
-import androidx.room.Entity
-import androidx.room.ForeignKey
-import androidx.room.PrimaryKey
+import androidx.room.*
 
 @Entity(
     tableName = "refuel",
@@ -19,6 +16,8 @@ data class Refuel(
     val id: Int,
     @ColumnInfo(name = "station_id")
     val stationID: Int,
+    @Embedded
+    val stationAddress: StationAddress, // denormalization: as user never changes the station's table
     val timestamp: Long,
     val supplier: String,
     val fuel: String,
