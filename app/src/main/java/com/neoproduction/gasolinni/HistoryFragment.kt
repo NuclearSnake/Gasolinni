@@ -5,20 +5,17 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.neoproduction.gasolinni.data.Refuel
-import com.neoproduction.gasolinni.data.RefuelDao
-import com.neoproduction.gasolinni.data.RefuelRoomDB
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 class HistoryFragment : Fragment() {
-    val refuels = mutableListOf<Refuel>()
+    val vm: MainViewModel by activityViewModels()
+
     lateinit var rv: RecyclerView
+    lateinit var adapter: HistoryAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -32,28 +29,13 @@ class HistoryFragment : Fragment() {
         rv = view.findViewById(R.id.rvHistory)
         val layoutManager = LinearLayoutManager(view.context)
         rv.layoutManager = layoutManager
-        rv.adapter = HistoryAdapter(refuels, context!!.applicationContext)
+        adapter = HistoryAdapter(requireContext().applicationContext)
+        rv.adapter = adapter
         rv.addItemDecoration(DividerItemDecoration(context, layoutManager.orientation))
 
-        GlobalScope.launch {
-            update()
-        }
-    }
-
-    private suspend fun update() {
-        val refuelDB = RefuelRoomDB.getDatabase(context!!)
-        val refuelDao = refuelDB.refuelDao()
-
-        val refuelsNew = refuelDao.getRefuelsAsync()
-        refuels.clear()
-        refuels.addAll(refuelsNew)
-        withContext(Dispatchers.Main) {
-            rv.adapter?.notifyDataSetChanged()
-        }
-    }
-
-    private suspend fun RefuelDao.getRefuelsAsync() = withContext(Dispatchers.IO) {
-        this@getRefuelsAsync.getRefuels()
+        vm.refuels.observe(this.viewLifecycleOwner, Observer { list ->
+            adapter.setData(list)
+        })
     }
 }
 

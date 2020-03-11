@@ -9,8 +9,15 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.neoproduction.gasolinni.data.Refuel
 
-class HistoryAdapter(val refuels: List<Refuel>, val context: Context) :
+class HistoryAdapter(private val context: Context) :
     RecyclerView.Adapter<HistoryAdapter.HistoryViewHolder>() {
+
+    private var refuels: List<Refuel> = listOf()
+    fun setData(newRefuels: List<Refuel>) {
+        refuels = newRefuels
+        notifyDataSetChanged()
+    }
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HistoryViewHolder {
         val view = LayoutInflater.from(parent.context)
             .inflate(R.layout.main_history_item, parent, false)
