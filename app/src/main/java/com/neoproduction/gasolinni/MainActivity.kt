@@ -19,10 +19,7 @@ class MainActivity : AppCompatActivity() {
         pager.adapter = mainFragmentStateAdapter
 
         TabLayoutMediator(tab_layout, pager) { tab, position ->
-            tab.text = when (position) {
-                0 -> "History"
-                else -> "Statistics"
-            }
+            tab.text = mainFragmentStateAdapter.fragmentNames[position]
         }.attach()
 
         fab.setOnClickListener {
@@ -33,6 +30,11 @@ class MainActivity : AppCompatActivity() {
 }
 
 class MainFragmentStateAdapter(activity: FragmentActivity) : FragmentStateAdapter(activity) {
+
+    val fragmentNames = listOf(
+        activity.getString(R.string.main_tab_name_history),
+        activity.getString(R.string.main_tab_name_statistics)
+    )
 
     override fun getItemCount(): Int = 2
 

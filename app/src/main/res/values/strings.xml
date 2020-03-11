@@ -2,4 +2,6 @@
     <string name="app_name">Gasolinni</string>
     <string name="placeh_price">%1.2f$</string>
     <string name="placeh_amount">%1dL</string>
+    <string name="main_tab_name_history">History</string>
+    <string name="main_tab_name_statistics">Statistics</string>
 </resources>
