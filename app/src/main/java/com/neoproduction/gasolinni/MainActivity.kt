@@ -1,7 +1,7 @@
 package com.neoproduction.gasolinni
 
-import android.content.Intent
 import android.os.Bundle
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.adapter.FragmentStateAdapter
@@ -9,6 +9,8 @@ import com.google.android.material.tabs.TabLayoutMediator
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
+    private val vm: MainViewModel by viewModels()
+
     private lateinit var mainFragmentStateAdapter: MainFragmentStateAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -22,10 +24,7 @@ class MainActivity : AppCompatActivity() {
             tab.text = mainFragmentStateAdapter.fragmentNames[position]
         }.attach()
 
-        fab.setOnClickListener {
-            val intent = Intent(this@MainActivity, AddGasStationActivity::class.java)
-            startActivity(intent)
-        }
+        fab.setOnClickListener { vm.onFabClick(this) }
     }
 }
 
