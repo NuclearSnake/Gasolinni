@@ -14,7 +14,7 @@ import androidx.room.*
 data class Refuel(
     @PrimaryKey(autoGenerate = true)
     val id: Int,
-    @ColumnInfo(name = "station_id")
+    @ColumnInfo(name = "station_id", index = true)
     val stationID: Int,
     @Embedded
     val stationAddress: StationAddress, // denormalization: as user never changes the station's table

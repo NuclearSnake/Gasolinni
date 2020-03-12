@@ -5,7 +5,7 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 
-@Database(entities = [Station::class, Refuel::class], version = 2, exportSchema = true)
+@Database(entities = [Station::class, Refuel::class], version = 3, exportSchema = true)
 abstract class RefuelRoomDB : RoomDatabase() {
     abstract fun stationDao(): StationDao
     abstract fun refuelDao(): RefuelDao
@@ -30,7 +30,9 @@ abstract class RefuelRoomDB : RoomDatabase() {
                     context.applicationContext,
                     RefuelRoomDB::class.java,
                     "refuel_db"
-                ).build()
+                    )
+                    .fallbackToDestructiveMigration()
+                    .build()
 
                 INSTANCE = insFinal
 
