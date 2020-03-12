@@ -24,7 +24,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginLeft="16dp"
-        android:text="Address"
+        android:text="@string/address"
         app:layout_constraintBottom_toBottomOf="@+id/etAddress"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView" />
@@ -39,11 +39,12 @@
         android:layout_marginEnd="16dp"
         android:layout_marginRight="16dp"
         android:ems="10"
-        android:hint="2 Lincoln Memorial Circle NW"
+        android:autofillHints="streetAddress"
         android:inputType="textPersonName"
         android:nextFocusDown="@id/etSupplier"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/textView2"
+        android:hint="@string/address_hint"
         app:layout_constraintTop_toTopOf="@+id/guideline" />
 
     <TextView
@@ -51,7 +52,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:text="Fuel"
+        android:text="@string/fuel"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/etAddress" />
@@ -61,7 +62,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
-        android:text="Supplier"
+        android:text="@string/supplier"
         app:layout_constraintEnd_toEndOf="@+id/etSupplier"
         app:layout_constraintStart_toStartOf="@+id/etSupplier"
         app:layout_constraintTop_toBottomOf="@+id/textView4" />
@@ -74,19 +75,20 @@
         android:layout_marginLeft="16dp"
         android:layout_marginTop="8dp"
         android:ems="10"
-        android:hint="Luck"
+        android:hint="@string/supplier_hint"
         android:inputType="textPersonName"
         android:nextFocusDown="@id/etFuel"
         app:layout_constraintEnd_toStartOf="@+id/textView4"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
+        android:importantForAutofill="no"
         app:layout_constraintTop_toBottomOf="@+id/textView5" />
 
     <TextView
         android:id="@+id/textView3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Fuel"
+        android:text="@string/fuel"
         app:layout_constraintEnd_toEndOf="@+id/etFuel"
         app:layout_constraintStart_toStartOf="@+id/etFuel"
         app:layout_constraintTop_toTopOf="@+id/textView5" />
@@ -99,12 +101,13 @@
         android:layout_marginEnd="16dp"
         android:layout_marginRight="16dp"
         android:ems="10"
-        android:hint="A-92"
+        android:hint="@string/fuel_hint"
         android:inputType="textPersonName"
         android:nextFocusDown="@id/etAmount"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toEndOf="@+id/textView4"
+        android:importantForAutofill="no"
         app:layout_constraintTop_toBottomOf="@+id/textView5" />
 
     <TextView
@@ -112,7 +115,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
-        android:text="Amount"
+        android:text="@string/amount"
         app:layout_constraintEnd_toEndOf="@+id/textView5"
         app:layout_constraintStart_toStartOf="@+id/textView5"
         app:layout_constraintTop_toBottomOf="@+id/etSupplier" />
@@ -123,18 +126,19 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:ems="4"
-        android:hint="60"
+        android:hint="@string/amount_hint"
         android:inputType="number"
         android:nextFocusDown="@id/etPrice"
         app:layout_constraintEnd_toEndOf="@+id/textView5"
         app:layout_constraintStart_toStartOf="@+id/textView5"
+        android:importantForAutofill="no"
         app:layout_constraintTop_toBottomOf="@+id/textView7" />
 
     <TextView
         android:id="@+id/textView8"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Price"
+        android:text="@string/price"
         app:layout_constraintEnd_toEndOf="@+id/textView3"
         app:layout_constraintStart_toStartOf="@+id/textView3"
         app:layout_constraintTop_toTopOf="@+id/textView7" />
@@ -145,10 +149,11 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:ems="4"
-        android:hint="27.90"
+        android:hint="@string/price_hint"
         android:inputType="numberDecimal"
         app:layout_constraintEnd_toEndOf="@+id/textView3"
         app:layout_constraintStart_toStartOf="@+id/textView3"
+        android:importantForAutofill="no"
         app:layout_constraintTop_toBottomOf="@+id/textView7" />
 
     <androidx.constraintlayout.widget.Guideline
@@ -162,7 +167,7 @@
         android:id="@+id/btnDiscard"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Discard"
+        android:text="@string/discard"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
@@ -170,7 +175,7 @@
         android:id="@+id/btnSave"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Save"
+        android:text="@string/save"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

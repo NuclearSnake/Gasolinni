@@ -4,4 +4,16 @@
     <string name="placeh_amount">%1dL</string>
     <string name="main_tab_name_history">History</string>
     <string name="main_tab_name_statistics">Statistics</string>
+    <string name="address">Address</string>
+    <string name="address_hint">2 Lincoln Memorial Circle NW</string>
+    <string name="fuel">Fuel</string>
+    <string name="supplier">Supplier</string>
+    <string name="supplier_hint">Luck</string>
+    <string name="fuel_hint">A-92</string>
+    <string name="amount">Amount</string>
+    <string name="amount_hint">60</string>
+    <string name="price">Price</string>
+    <string name="price_hint">27.90</string>
+    <string name="discard">Discard</string>
+    <string name="save">Save</string>
 </resources>
