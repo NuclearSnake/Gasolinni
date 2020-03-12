@@ -17,7 +17,7 @@ import kotlinx.coroutines.launch
 
 class MainViewModel(app: Application) : AndroidViewModel(app) {
     private val firebaseAuth = FirebaseAuth.getInstance()
-    private val repository = Repository(app)
+    private val repository = Repository.getInstance(app)
     val refuels = repository.getRefuels()
     val stationStats = repository.getStationsStats()
 
