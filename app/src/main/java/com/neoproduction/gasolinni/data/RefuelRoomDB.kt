@@ -27,9 +27,9 @@ abstract class RefuelRoomDB : RoomDatabase() {
                     return ins2
 
                 val insFinal = Room.databaseBuilder(
-                    context.applicationContext,
-                    RefuelRoomDB::class.java,
-                    "refuel_db"
+                        context.applicationContext,
+                        RefuelRoomDB::class.java,
+                        "refuel_db"
                     )
                     .fallbackToDestructiveMigration()
                     .build()
