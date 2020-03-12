@@ -1,4 +1,4 @@
-package com.neoproduction.gasolinni
+package com.neoproduction.gasolinni.ui.edit
 
 class FieldsContainer(
     val gps: String,

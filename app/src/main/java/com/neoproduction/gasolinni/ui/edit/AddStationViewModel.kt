@@ -1,4 +1,4 @@
-package com.neoproduction.gasolinni
+package com.neoproduction.gasolinni.ui.edit
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel

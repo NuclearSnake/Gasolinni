@@ -1,4 +1,4 @@
-package com.neoproduction.gasolinni
+package com.neoproduction.gasolinni.ui.main.statistics
 
 import android.content.Context
 import android.view.LayoutInflater
@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.neoproduction.gasolinni.R
 import com.neoproduction.gasolinni.data.StationStats
 
 class StatisticAdapter(private val context: Context) :
@@ -21,7 +22,9 @@ class StatisticAdapter(private val context: Context) :
         val view = LayoutInflater.from(parent.context)
             .inflate(R.layout.main_statistics_item, parent, false)
 
-        return StatisticViewHolder(view)
+        return StatisticViewHolder(
+            view
+        )
     }
 
     override fun getItemCount(): Int = stations.size

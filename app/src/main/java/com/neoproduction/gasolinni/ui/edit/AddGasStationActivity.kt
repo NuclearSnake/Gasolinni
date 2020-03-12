@@ -1,4 +1,4 @@
-package com.neoproduction.gasolinni
+package com.neoproduction.gasolinni.ui.edit
 
 import android.app.Activity
 import android.os.Bundle
@@ -6,6 +6,7 @@ import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
+import com.neoproduction.gasolinni.R
 import kotlinx.android.synthetic.main.activity_add_gas_station.*
 
 class AddGasStationActivity : AppCompatActivity() {
@@ -36,6 +37,13 @@ class AddGasStationActivity : AppCompatActivity() {
         val amount = etAmount.text.toString().toIntOrNull()
         val price = etPrice.text.toString().toDoubleOrNull()
 
-        return FieldsContainer(gps, address, supplier, fuel, amount, price)
+        return FieldsContainer(
+            gps,
+            address,
+            supplier,
+            fuel,
+            amount,
+            price
+        )
     }
 }

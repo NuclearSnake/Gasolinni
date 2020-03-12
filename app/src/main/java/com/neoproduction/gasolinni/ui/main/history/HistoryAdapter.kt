@@ -1,4 +1,4 @@
-package com.neoproduction.gasolinni
+package com.neoproduction.gasolinni.ui.main.history
 
 import android.content.Context
 import android.text.format.DateUtils
@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.neoproduction.gasolinni.R
 import com.neoproduction.gasolinni.data.Refuel
 
 class HistoryAdapter(private val context: Context) :
@@ -22,7 +23,9 @@ class HistoryAdapter(private val context: Context) :
         val view = LayoutInflater.from(parent.context)
             .inflate(R.layout.main_history_item, parent, false)
 
-        return HistoryViewHolder(view)
+        return HistoryViewHolder(
+            view
+        )
     }
 
     override fun getItemCount(): Int = refuels.size

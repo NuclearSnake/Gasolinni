@@ -1,4 +1,4 @@
-package com.neoproduction.gasolinni
+package com.neoproduction.gasolinni.ui.main.history
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -10,31 +10,37 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.neoproduction.gasolinni.R
+import com.neoproduction.gasolinni.ui.main.MainViewModel
 
-class StatisticsFragment : Fragment() {
+class HistoryFragment : Fragment() {
     private val vm: MainViewModel by activityViewModels()
 
     private lateinit var rv: RecyclerView
-    private lateinit var adapter: StatisticAdapter
+    private lateinit var adapter: HistoryAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        return inflater.inflate(R.layout.main_tab_statistics, container, false)
+        return inflater.inflate(R.layout.main_tab_history, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        rv = view.findViewById(R.id.rvStatistics)
+        rv = view.findViewById(R.id.rvHistory)
         val layoutManager = LinearLayoutManager(view.context)
         rv.layoutManager = layoutManager
-        adapter = StatisticAdapter(requireContext().applicationContext)
+        adapter =
+            HistoryAdapter(
+                requireContext().applicationContext
+            )
         rv.adapter = adapter
         rv.addItemDecoration(DividerItemDecoration(context, layoutManager.orientation))
 
-        vm.stationStats.observe(this.viewLifecycleOwner, Observer { list ->
+        vm.refuels.observe(this.viewLifecycleOwner, Observer { list ->
             adapter.setData(list)
         })
     }
 }
+

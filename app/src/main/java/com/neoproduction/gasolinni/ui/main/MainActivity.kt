@@ -1,9 +1,10 @@
-package com.neoproduction.gasolinni
+package com.neoproduction.gasolinni.ui.main
 
 import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.tabs.TabLayoutMediator
+import com.neoproduction.gasolinni.R
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
@@ -20,7 +21,8 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        mainFragmentStateAdapter = MainFragmentStateAdapter(this)
+        mainFragmentStateAdapter =
+            MainFragmentStateAdapter(this)
         pager.adapter = mainFragmentStateAdapter
 
         TabLayoutMediator(tab_layout, pager) { tab, position ->

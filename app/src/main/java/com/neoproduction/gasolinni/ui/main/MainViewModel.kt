@@ -1,4 +1,4 @@
-package com.neoproduction.gasolinni
+package com.neoproduction.gasolinni.ui.main
 
 import android.app.Activity
 import android.app.Application
@@ -12,6 +12,7 @@ import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import com.neoproduction.gasolinni.data.Repository
 import com.neoproduction.gasolinni.data.Station
+import com.neoproduction.gasolinni.ui.edit.AddGasStationActivity
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
