@@ -3,43 +3,30 @@ package com.neoproduction.gasolinni
 import android.app.Activity
 import android.os.Bundle
 import android.widget.Toast
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import com.neoproduction.gasolinni.data.Refuel
-import com.neoproduction.gasolinni.data.RefuelRoomDB
-import com.neoproduction.gasolinni.data.Station
-import com.neoproduction.gasolinni.data.StationAddress
+import androidx.lifecycle.Observer
 import kotlinx.android.synthetic.main.activity_add_gas_station.*
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 class AddGasStationActivity : AppCompatActivity() {
+    val vm: AddStationViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_gas_station)
 
-        btnDiscard.setOnClickListener {
-            setResult(Activity.RESULT_CANCELED)
+        btnDiscard.setOnClickListener { vm.onDiscard() }
+        btnSave.setOnClickListener { vm.onSave(tryParseFields()) }
+
+        vm.toast.observe(this, Observer { text ->
+            Toast.makeText(this, text, Toast.LENGTH_LONG).show()
+        })
+
+        vm.finish.observe(this, Observer { result ->
+            setResult(if (result) Activity.RESULT_OK else Activity.RESULT_CANCELED)
             finish()
-        }
-
-        btnSave.setOnClickListener {
-            GlobalScope.launch(Dispatchers.Main) {
-                insertRefuel()
-            }
-        }
+        })
     }
-
-    class FieldsContainer(
-        val gps: String?,
-        val address: String?,
-        val supplier: String,
-        val fuel: String,
-        val amount: Int,
-        val price: Int
-    )
 
     private fun tryParseFields(): FieldsContainer? {
         val gps = ""
@@ -69,64 +56,5 @@ class AddGasStationActivity : AppCompatActivity() {
 
         // amount and price can't be null here
         return FieldsContainer(gps, address, supplier, fuel, amount!!, (price!! * 100).toInt())
-    }
-
-
-    private suspend fun insertRefuel() {
-        val fieldsContainer = tryParseFields() ?: return
-
-        val refuelDB = RefuelRoomDB.getDatabase(this)
-        val refuelDao = refuelDB.refuelDao()
-        val stationDao = refuelDB.stationDao()
-
-        val stationAddress = StationAddress(
-            fieldsContainer.gps ?: "",
-            fieldsContainer.address ?: ""
-        )
-
-        var id = 0
-        withContext(Dispatchers.IO) {
-            val stationsFound: List<Station> =
-                stationDao.getStation(stationAddress.gps, stationAddress.textAddress)
-            if (stationsFound.isNotEmpty())
-                id = stationsFound[0].id
-        }
-
-        if (id == 0) { // Not found
-            withContext(Dispatchers.IO) {
-                id = stationDao.insertStation(
-                    Station(id, stationAddress) // id = 0 stands for auto_increment
-                ).toInt()
-            }
-        }
-
-        var refuelID = -1
-        withContext(Dispatchers.IO) {
-            // 0 stands for not-set as ID
-            refuelID = refuelDao.insertRefuel(
-                Refuel(
-                    0,
-                    id,
-                    stationAddress,
-                    System.currentTimeMillis(),
-                    fieldsContainer.supplier,
-                    fieldsContainer.fuel,
-                    fieldsContainer.amount,
-                    fieldsContainer.price
-                )
-            ).toInt()
-        }
-
-        if (refuelID == -1) {
-            Toast.makeText(
-                this,
-                "Error while saving data. Please try again later",
-                Toast.LENGTH_LONG
-            ).show()
-        } else {
-            Toast.makeText(this, "Saved", Toast.LENGTH_LONG).show()
-            setResult(Activity.RESULT_OK)
-            finish()
-        }
     }
 }
