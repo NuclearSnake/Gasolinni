@@ -8,8 +8,15 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.neoproduction.gasolinni.data.StationStats
 
-class StatisticAdapter(private val stations: List<StationStats>, private val context: Context) :
+class StatisticAdapter(private val context: Context) :
     RecyclerView.Adapter<StatisticAdapter.StatisticViewHolder>() {
+
+    private var stations: List<StationStats> = listOf()
+    fun setData(newStations: List<StationStats>) {
+        stations = newStations
+        notifyDataSetChanged()
+    }
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): StatisticViewHolder {
         val view = LayoutInflater.from(parent.context)
             .inflate(R.layout.main_statistics_item, parent, false)

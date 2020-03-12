@@ -9,6 +9,7 @@ import com.neoproduction.gasolinni.data.Repository
 class MainViewModel(app: Application) : AndroidViewModel(app) {
     private val repository = Repository(app)
     val refuels = repository.getRefuels()
+    val stationStats = repository.getStationsStats()
 
     fun onFabClick(activity: Activity) {
         val intent = Intent(activity, AddGasStationActivity::class.java)
