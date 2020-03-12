@@ -11,7 +11,6 @@ import com.neoproduction.gasolinni.data.Station
 import com.neoproduction.gasolinni.data.StationAddress
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 class AddStationViewModel(app: Application) : AndroidViewModel(app) {
     private val repository = Repository.getInstance(app)
@@ -27,36 +26,26 @@ class AddStationViewModel(app: Application) : AndroidViewModel(app) {
         finishLD.postValue(false)
     }
 
-    fun onSave(parsedFields: FieldsContainer?) {
+    fun onSave(parsedFields: FieldsContainer) {
         insertOrEditRefuel(parsedFields)
     }
 
-    private fun insertOrEditRefuel(parsedFields: FieldsContainer?) =
+    private fun insertOrEditRefuel(parsedFields: FieldsContainer) =
         viewModelScope.launch(Dispatchers.IO) {
-            val fieldsContainer = parsedFields ?: return@launch
+            val fieldsContainer = parsedFields
+            val errorMsg = getErrorMessageOrNull(parsedFields)
+            if (errorMsg != null) {
+                toastLD.postValue(errorMsg)
+                return@launch
+            }
 
             val stationAddress = StationAddress(
-                fieldsContainer.gps ?: "",
-                fieldsContainer.address ?: ""
+                fieldsContainer.gps,
+                fieldsContainer.address
             )
 
             val stationID = findStationIdOrInsert(stationAddress)
-            var refuelID = -1
-            withContext(Dispatchers.IO) {
-                // 0 stands for not-set as ID
-                refuelID = repository.insertRefuel(
-                    Refuel(
-                        0,
-                        stationID,
-                        stationAddress,
-                        System.currentTimeMillis(),
-                        fieldsContainer.supplier,
-                        fieldsContainer.fuel,
-                        fieldsContainer.amount,
-                        fieldsContainer.price
-                    )
-                ).toInt()
-            }
+            val refuelID = insertRefuel(stationID, stationAddress, fieldsContainer).toInt()
 
             // successful insert -> id should be some positive number
             if (refuelID == -1) {
@@ -67,6 +56,27 @@ class AddStationViewModel(app: Application) : AndroidViewModel(app) {
             }
         }
 
+    /**
+     * Checks parsed earlier fields from FieldsContainer and returns
+     * the appropriate error message or null if all fields are correct
+     */
+    private fun getErrorMessageOrNull(parsedFields: FieldsContainer): String? {
+        var errorMessage: String? = null
+        // TODO: Error indication with positioning on editText with the error
+        if (parsedFields.address.isBlank() && parsedFields.gps.isBlank())
+            errorMessage = "No address provided"
+        else if (parsedFields.supplier.isBlank())
+            errorMessage = "Supplier not specified"
+        else if (parsedFields.fuel.isBlank())
+            errorMessage = "Fuel not specified"
+        else if (parsedFields.amount == null)
+            errorMessage = "Wrong amount"
+        else if (parsedFields.price == null)
+            errorMessage = "Incorrect price"
+
+        return errorMessage // null if nothing suspicious found
+    }
+
     private fun findStationIdOrInsert(stationAddress: StationAddress): Int {
         val stationsFound: List<Station> =
             repository.getStation(stationAddress.gps, stationAddress.textAddress)
@@ -75,7 +85,23 @@ class AddStationViewModel(app: Application) : AndroidViewModel(app) {
             return stationsFound[0].id
 
         // If not found - need to insert
-        return repository.insertStation(Station(0, stationAddress))
-            .toInt() // id = 0 stands for auto_increment
+        // id = 0 stands for auto increment
+        return repository.insertStation(Station(0, stationAddress)).toInt()
     }
+
+    private fun insertRefuel(
+        stationID: Int, stationAddress: StationAddress,
+        fieldsContainer: FieldsContainer
+    ): Long = repository.insertRefuel(
+        Refuel(
+            0, // 0 stands for auto increment
+            stationID,
+            stationAddress,
+            System.currentTimeMillis(),
+            fieldsContainer.supplier,
+            fieldsContainer.fuel,
+            fieldsContainer.amount!!,
+            (fieldsContainer.price!! * 100).toInt()
+        )
+    )
 }
