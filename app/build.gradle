@@ -2,6 +2,7 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
+apply plugin: 'com.google.gms.google-services'
 
 ext.readBuildNumber = {
     def versionPropsFile = file('version.properties')
@@ -99,4 +100,8 @@ dependencies {
     implementation "androidx.fragment:fragment-ktx:1.2.2"
     implementation "androidx.activity:activity-ktx:1.1.0"
     implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.2.0'
+
+    // Firebase
+    implementation 'com.google.firebase:firebase-database-ktx:19.2.1'
+    implementation 'com.google.firebase:firebase-auth:19.2.0'
 }
