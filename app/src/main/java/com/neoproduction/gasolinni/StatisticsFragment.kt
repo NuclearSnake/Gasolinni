@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 
-class StatisticFragment : Fragment() {
+class StatisticsFragment : Fragment() {
     private val vm: MainViewModel by activityViewModels()
 
     private lateinit var rv: RecyclerView

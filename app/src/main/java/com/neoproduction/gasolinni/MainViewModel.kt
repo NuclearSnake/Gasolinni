@@ -15,8 +15,4 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
         val intent = Intent(activity, AddGasStationActivity::class.java)
         activity.startActivity(intent)
     }
-
-//    private fun updateRefuelsHistory() = viewModelScope.launch(Dispatchers.IO) {
-//        repository.getRefuels()
-//    }
 }

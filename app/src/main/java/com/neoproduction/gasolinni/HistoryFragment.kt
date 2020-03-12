@@ -12,10 +12,10 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 
 class HistoryFragment : Fragment() {
-    val vm: MainViewModel by activityViewModels()
+    private val vm: MainViewModel by activityViewModels()
 
-    lateinit var rv: RecyclerView
-    lateinit var adapter: HistoryAdapter
+    private lateinit var rv: RecyclerView
+    private lateinit var adapter: HistoryAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater,
