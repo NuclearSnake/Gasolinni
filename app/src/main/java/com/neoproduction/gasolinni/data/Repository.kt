@@ -4,10 +4,16 @@ import android.app.Application
 
 class Repository private constructor(
     app: Application,
+    private val firebaseManager: FirebaseManager = FirebaseManager(),
     private val refuelDB: RefuelRoomDB = RefuelRoomDB.getDatabase(app),
     private val refuelDao: RefuelDao = refuelDB.refuelDao(),
     private val stationDao: StationDao = refuelDB.stationDao()
 ) : RefuelDao by refuelDao, StationDao by stationDao {
+
+    fun updateFirebase() {
+        val stations = getStations()
+        firebaseManager.signInToFirebaseAndUpdate(stations)
+    }
 
     companion object {
         @Volatile

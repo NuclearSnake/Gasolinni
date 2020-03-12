@@ -30,6 +30,10 @@ class AddStationViewModel(app: Application) : AndroidViewModel(app) {
         insertOrEditRefuel(parsedFields)
     }
 
+    private fun onStationsChange() = viewModelScope.launch(Dispatchers.IO) {
+        repository.updateFirebase()
+    }
+
     private fun insertOrEditRefuel(parsedFields: FieldsContainer) =
         viewModelScope.launch(Dispatchers.IO) {
             val errorMsg = getErrorMessageOrNull(parsedFields)
@@ -81,7 +85,9 @@ class AddStationViewModel(app: Application) : AndroidViewModel(app) {
 
         // If not found - need to insert
         // id = 0 stands for auto increment
-        return repository.insertStation(Station(0, stationAddress)).toInt()
+        val newId = repository.insertStation(Station(0, stationAddress)).toInt()
+        onStationsChange()
+        return newId
     }
 
     private fun insertRefuel(

@@ -12,11 +12,6 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var mainFragmentStateAdapter: MainFragmentStateAdapter
 
-    override fun onStart() {
-        super.onStart()
-        vm.onStationsChange()
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
