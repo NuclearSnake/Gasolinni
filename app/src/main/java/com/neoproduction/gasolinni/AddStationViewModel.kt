@@ -19,7 +19,7 @@ class AddStationViewModel(app: Application) : AndroidViewModel(app) {
         get() = toastLD
 
     private val finishLD = MutableLiveData<Boolean>()
-    val finish: LiveData<Boolean>
+    val finish: LiveData<Boolean> // true for success, false for cancelled
         get() = finishLD
 
     fun onDiscard() {
@@ -32,20 +32,15 @@ class AddStationViewModel(app: Application) : AndroidViewModel(app) {
 
     private fun insertOrEditRefuel(parsedFields: FieldsContainer) =
         viewModelScope.launch(Dispatchers.IO) {
-            val fieldsContainer = parsedFields
             val errorMsg = getErrorMessageOrNull(parsedFields)
             if (errorMsg != null) {
                 toastLD.postValue(errorMsg)
                 return@launch
             }
 
-            val stationAddress = StationAddress(
-                fieldsContainer.gps,
-                fieldsContainer.address
-            )
-
+            val stationAddress = StationAddress(parsedFields.gps, parsedFields.address)
             val stationID = findStationIdOrInsert(stationAddress)
-            val refuelID = insertRefuel(stationID, stationAddress, fieldsContainer).toInt()
+            val refuelID = insertRefuel(stationID, stationAddress, parsedFields).toInt()
 
             // successful insert -> id should be some positive number
             if (refuelID == -1) {
