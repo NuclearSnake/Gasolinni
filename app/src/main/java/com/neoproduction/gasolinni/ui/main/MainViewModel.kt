@@ -4,6 +4,8 @@ import android.app.Application
 import android.content.Context
 import android.content.Intent
 import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.neoproduction.gasolinni.data.Repository
 import com.neoproduction.gasolinni.needSync
@@ -18,6 +20,10 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
     val refuels = repository.getRefuels()
     val stationStats = repository.getStationsStats()
 
+    private val fabVisibilityLD = MutableLiveData(true)
+    val fabVisibility: LiveData<Boolean>
+        get() = fabVisibilityLD
+
     init {
         if (app.needSync) {
             app.scheduleUpdateWorker()
@@ -30,6 +36,11 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
     fun onDeleteItem(id: Int) = viewModelScope.launch(Dispatchers.IO) {
         repository.deleteRefuel(id)
     }
+
+    fun onScrollStateChanged(scrolling: Boolean) {
+        fabVisibilityLD.value = !scrolling
+    }
+
 
     private fun startEditActivity(context: Context, id: Int? = null) {
         val intent = Intent(context, EditRefuelActivity::class.java)

@@ -17,7 +17,7 @@ interface RefuelDao {
     @Query("SELECT * FROM refuel WHERE id = :id")
     fun getRefuel(id: Int): List<Refuel>
 
-    @Query("SELECT * FROM refuel")
+    @Query("SELECT * FROM refuel ORDER BY timestamp DESC")
     fun getRefuels(): LiveData<List<Refuel>>
 }
 

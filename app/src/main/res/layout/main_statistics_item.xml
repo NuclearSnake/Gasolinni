@@ -7,53 +7,59 @@
 
     <TextView
         android:id="@+id/tvTextAddress"
+        style="@style/big"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginTop="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvGpsLocation"
         tools:text="Area 51b" />
 
     <TextView
         android:id="@+id/tvGpsLocation"
+        style="@style/small"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintStart_toStartOf="@+id/tvTextAddress"
-        app:layout_constraintTop_toBottomOf="@+id/tvTextAddress"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
         tools:text="48.1507646, 2.8443837" />
 
     <TextView
         android:id="@+id/tvAmount"
+        style="@style/normal"
         android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:layout_height="wrap_content"
         android:gravity="center"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/tvTotal"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/barrier"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvTextAddress"
         tools:text="50L" />
 
     <TextView
         android:id="@+id/tvTotal"
+        style="@style/normal"
         android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:layout_height="wrap_content"
         android:gravity="center"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/tvTextAddress"
+        app:layout_constraintEnd_toStartOf="@+id/tvPerAmount"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/tvAmount"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvTextAddress"
         tools:text="27.14$" />
 
-    <androidx.constraintlayout.widget.Barrier
-        android:id="@+id/barrier"
-        android:layout_width="wrap_content"
+    <TextView
+        android:id="@+id/tvPerAmount"
+        style="@style/normal"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        app:barrierDirection="right"
-        app:constraint_referenced_ids="tvGpsLocation,tvTextAddress"
-        tools:layout_editor_absoluteX="411dp" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/tvTotal"
+        app:layout_constraintTop_toBottomOf="@+id/tvTextAddress"
+        tools:text="0.5428$/L" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

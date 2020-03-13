@@ -6,9 +6,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.neoproduction.gasolinni.R
+import com.neoproduction.gasolinni.*
 import com.neoproduction.gasolinni.data.StationStats
-import com.neoproduction.gasolinni.toStringPrice
 
 class StatisticAdapter(private val context: Context) :
     RecyclerView.Adapter<StatisticAdapter.StatisticViewHolder>() {
@@ -33,9 +32,16 @@ class StatisticAdapter(private val context: Context) :
     override fun onBindViewHolder(holder: StatisticViewHolder, position: Int) {
         val station = stations[position]
         holder.tvTextAddress.text = station.text_address
-        holder.tvGpsLocation.text = if (station.gps.isBlank()) "" else station.gps
+        holder.tvGpsLocation.text = if (station.gps.isBlank())
+            "no gps"
+        else
+            station.gps.toCoords().toBetterString(context)
         holder.tvAmount.text = context.getString(R.string.placeh_amount, station.amount)
         holder.tvTotal.text = station.total.toStringPrice(context)
+        holder.tvPricePerAmount.text = context.getString(
+            R.string.placeh_price_per_amount,
+            station.total.toDoublePrice() / station.amount
+        )
     }
 
     class StatisticViewHolder(view: View) : RecyclerView.ViewHolder(view) {
@@ -43,5 +49,6 @@ class StatisticAdapter(private val context: Context) :
         val tvTextAddress: TextView = view.findViewById(R.id.tvTextAddress)
         val tvAmount: TextView = view.findViewById(R.id.tvAmount)
         val tvTotal: TextView = view.findViewById(R.id.tvTotal)
+        val tvPricePerAmount: TextView = view.findViewById(R.id.tvPerAmount)
     }
 }

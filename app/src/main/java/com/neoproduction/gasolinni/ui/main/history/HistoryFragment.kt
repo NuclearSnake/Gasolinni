@@ -46,6 +46,17 @@ class HistoryFragment : Fragment() {
         vm.refuels.observe(this.viewLifecycleOwner, Observer { list ->
             adapter.setData(list)
         })
+
+        rv.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                super.onScrollStateChanged(recyclerView, newState)
+
+                when (newState) {
+                    RecyclerView.SCROLL_STATE_IDLE -> vm.onScrollStateChanged(false)
+                    else -> vm.onScrollStateChanged(true)
+                }
+            }
+        })
     }
 }
 
