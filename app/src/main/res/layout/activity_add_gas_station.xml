@@ -6,13 +6,10 @@
     android:layout_height="match_parent"
     tools:context=".ui.edit.AddGasStationActivity">
 
-    <TextView
-        android:id="@+id/textView"
+    <com.mapbox.mapboxsdk.maps.MapView
+        android:id="@+id/mapView"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:background="#63FF9800"
-        android:gravity="center"
-        android:text="Here will be the map"
         app:layout_constraintBottom_toTopOf="@+id/guideline"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -27,7 +24,7 @@
         android:text="@string/address"
         app:layout_constraintBottom_toBottomOf="@+id/etAddress"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView" />
+        app:layout_constraintTop_toBottomOf="@+id/mapView" />
 
     <EditText
         android:id="@+id/etAddress"
@@ -35,17 +32,16 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginLeft="16dp"
-        android:layout_marginTop="8dp"
         android:layout_marginEnd="16dp"
         android:layout_marginRight="16dp"
-        android:ems="10"
         android:autofillHints="streetAddress"
+        android:ems="10"
+        android:hint="@string/address_hint"
         android:inputType="textPersonName"
         android:nextFocusDown="@id/etSupplier"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/textView2"
-        android:hint="@string/address_hint"
-        app:layout_constraintTop_toTopOf="@+id/guideline" />
+        app:layout_constraintTop_toBottomOf="@+id/tvGps" />
 
     <TextView
         android:id="@+id/textView4"
@@ -178,4 +174,13 @@
         android:text="@string/save"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
+
+    <TextView
+        android:id="@+id/tvGps"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/guideline"
+        tools:text="0.000000, 0.0000000" />
 </androidx.constraintlayout.widget.ConstraintLayout>

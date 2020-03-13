@@ -84,3 +84,4 @@ lint/outputs/
 lint/tmp/
 # lint/reports/
 /app/google-services.json
+/app/src/main/java/com/neoproduction/gasolinni/ui/edit/MapboxInfo.kt

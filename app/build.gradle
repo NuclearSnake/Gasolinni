@@ -23,8 +23,8 @@ ext.readBuildNumber = {
 
 ext {
     versionMajor = "0"
-    versionMid = "5"
-    versionMinor = "1"
+    versionMid = "7"
+    versionMinor = "4"
 
     customBuildNumber = readBuildNumber()
 }
@@ -104,4 +104,7 @@ dependencies {
     // Firebase
     implementation 'com.google.firebase:firebase-database-ktx:19.2.1'
     implementation 'com.google.firebase:firebase-auth:19.2.0'
+
+    // Map API
+    implementation 'com.mapbox.mapboxsdk:mapbox-android-sdk:9.0.0'
 }
