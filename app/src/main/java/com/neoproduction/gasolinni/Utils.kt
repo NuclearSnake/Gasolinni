@@ -1,13 +1,11 @@
 package com.neoproduction.gasolinni
 
 import android.content.Context
-import androidx.work.Constraints
-import androidx.work.NetworkType
-import androidx.work.OneTimeWorkRequestBuilder
-import androidx.work.WorkManager
+import androidx.work.*
 
 const val SHARED_PREFERENCE_FILE_NAME = "SharedPrefsSync"
 const val NEED_SYNC_KEY = "need_sync"
+const val UPDATE_WORK_NAME = "updateDb"
 
 fun Context.scheduleUpdateWorker() {
     val constrains = Constraints.Builder()
@@ -17,7 +15,8 @@ fun Context.scheduleUpdateWorker() {
         .setConstraints(constrains)
         .build()
 
-    WorkManager.getInstance(this).enqueue(workRequest)
+    WorkManager.getInstance(this)
+        .enqueueUniqueWork(UPDATE_WORK_NAME, ExistingWorkPolicy.KEEP, workRequest)
 }
 
 /**
