@@ -17,5 +17,7 @@
     <string name="discard">Discard</string>
     <string name="save">Save</string>
     <string name="mapbox">pk.eyJ1IjoiYWxzdDg0IiwiYSI6ImNrNnViZGFiejA3Z2Yza3A3eGR4cGFtaGQifQ._vgX8b51zhbs1BghJNWRuA</string>
-    <string name="placeh_gps">%1f, %2f</string>
+    <string name="placeh_gps">gps: %1f, %2f</string>
+    <string name="edit_item">edit item</string>
+    <string name="delete_item">delete item</string>
 </resources>

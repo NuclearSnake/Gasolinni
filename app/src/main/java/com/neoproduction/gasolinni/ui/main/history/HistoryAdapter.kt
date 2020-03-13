@@ -5,15 +5,19 @@ import android.text.format.DateUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.neoproduction.gasolinni.R
 import com.neoproduction.gasolinni.data.Refuel
+import com.neoproduction.gasolinni.toBetterString
+import com.neoproduction.gasolinni.toCoords
 import com.neoproduction.gasolinni.toStringPrice
 
 class HistoryAdapter(
     private val context: Context,
-    private val onClickListener: View.OnClickListener
+    private val onEditClickListener: View.OnClickListener,
+    private val onDeleteClickListener: View.OnClickListener
 ) :
     RecyclerView.Adapter<HistoryAdapter.HistoryViewHolder>() {
 
@@ -27,7 +31,7 @@ class HistoryAdapter(
         val view = LayoutInflater.from(parent.context)
             .inflate(R.layout.main_history_item, parent, false)
 
-        return HistoryViewHolder(view, onClickListener)
+        return HistoryViewHolder(view, onEditClickListener, onDeleteClickListener)
     }
 
     override fun getItemCount(): Int = refuels.size
@@ -38,9 +42,9 @@ class HistoryAdapter(
         holder.tvPrice.text = refuel.price.toStringPrice(context)
 
         holder.tvGpsLocation.text = if (refuel.stationAddress.gps.isBlank())
-            ""
+            "no gps"
         else
-            refuel.stationAddress.gps
+            refuel.stationAddress.gps.toCoords().toBetterString(context)
 
         holder.tvTextAddress.text = if (refuel.stationAddress.textAddress.isBlank())
             "N/A"
@@ -57,11 +61,16 @@ class HistoryAdapter(
         holder.tvSupplier.text = refuel.supplier
         holder.tvFuel.text = refuel.fuel
 
-        holder.itemView.tag = refuel.id // so that we can guess the item clicked then
+        // so that we can guess the item clicked then
+        holder.ivDelete.tag = refuel.id
+        holder.ivEdit.tag = refuel.id
     }
 
-    class HistoryViewHolder(view: View, onClickListener: View.OnClickListener) :
-        RecyclerView.ViewHolder(view) {
+    class HistoryViewHolder(
+        view: View,
+        onEditClickListener: View.OnClickListener,
+        onDeleteClickListener: View.OnClickListener
+    ) : RecyclerView.ViewHolder(view) {
 
         val tvGpsLocation: TextView = view.findViewById(R.id.tvGpsLocation)
         val tvTextAddress: TextView = view.findViewById(R.id.tvTextAddress)
@@ -70,9 +79,12 @@ class HistoryAdapter(
         val tvDatetime: TextView = view.findViewById(R.id.tvDatetime)
         val tvAmount: TextView = view.findViewById(R.id.tvAmount)
         val tvPrice: TextView = view.findViewById(R.id.tvPrice)
+        val ivDelete: ImageView = view.findViewById(R.id.ivDelete)
+        val ivEdit: ImageView = view.findViewById(R.id.ivEdit)
 
         init {
-            view.setOnClickListener(onClickListener)
+            ivEdit.setOnClickListener(onEditClickListener)
+            ivDelete.setOnClickListener(onDeleteClickListener)
         }
     }
 }

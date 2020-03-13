@@ -11,6 +11,9 @@ interface RefuelDao {
     @Update
     fun updateRefuel(refuel: Refuel): Int
 
+    @Query("DELETE FROM refuel WHERE id = :id")
+    fun deleteRefuel(id: Int): Int
+
     @Query("SELECT * FROM refuel WHERE id = :id")
     fun getRefuel(id: Int): List<Refuel>
 

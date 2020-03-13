@@ -19,11 +19,8 @@ import com.mapbox.mapboxsdk.maps.Style
 import com.mapbox.mapboxsdk.style.layers.PropertyFactory.*
 import com.mapbox.mapboxsdk.style.layers.SymbolLayer
 import com.mapbox.mapboxsdk.style.sources.GeoJsonSource
-import com.neoproduction.gasolinni.R
+import com.neoproduction.gasolinni.*
 import com.neoproduction.gasolinni.data.Refuel
-import com.neoproduction.gasolinni.scheduleUpdateWorker
-import com.neoproduction.gasolinni.setNeedSync
-import com.neoproduction.gasolinni.toDoublePrice
 import kotlinx.android.synthetic.main.activity_edit_refuel.*
 
 
@@ -110,7 +107,7 @@ class EditRefuelActivity : AppCompatActivity() {
     }
 
     private fun onMapClicked(coords: LatLng): Boolean {
-        tvGps.text = getString(R.string.placeh_gps, coords.latitude, coords.longitude)
+        tvGps.text = coords.toBetterString(this)
         moveMarker(coords)
         this.coords = coords
         return true
@@ -134,13 +131,12 @@ class EditRefuelActivity : AppCompatActivity() {
             etPrice.setText(refuel.price.toDoublePrice().toString())
             etFuel.setText(refuel.fuel)
             etSupplier.setText(refuel.supplier)
-            tvGps.text = refuel.stationAddress.gps
             tvGps.setTextColor(Color.rgb(200, 200, 200))
 
             if (refuel.stationAddress.gps.isNotBlank()) {
-                val list = refuel.stationAddress.gps.split(" ")
-                val coords = LatLng(list[0].toDouble(), list[1].toDouble())
+                val coords = refuel.stationAddress.gps.toCoords()
 
+                tvGps.text = coords.toBetterString(this)
                 applyCoordinates(coords)
 
                 this.coords = coords

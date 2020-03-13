@@ -2,6 +2,7 @@ package com.neoproduction.gasolinni
 
 import android.content.Context
 import androidx.work.*
+import com.mapbox.mapboxsdk.geometry.LatLng
 
 const val SHARED_PREFERENCE_FILE_NAME = "SharedPrefsSync"
 const val NEED_SYNC_KEY = "need_sync"
@@ -39,3 +40,11 @@ fun Int.toStringPrice(context: Context) =
 
 fun Int.toDoublePrice() = this.toDouble() / 100
 fun Double.toPriceInt() = (this * 100).toInt()
+
+fun LatLng.toBetterString(context: Context) =
+    context.getString(R.string.placeh_gps, latitude, longitude)
+
+fun String.toCoords(): LatLng {
+    val list = this.split(" ")
+    return LatLng(list[0].toDouble(), list[1].toDouble())
+}

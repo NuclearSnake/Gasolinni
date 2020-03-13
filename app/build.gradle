@@ -42,6 +42,7 @@ android {
         versionName "${versionMajor}.${versionMid}.${versionMinor}"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        vectorDrawables.useSupportLibrary = true
 
         kapt {
             arguments {

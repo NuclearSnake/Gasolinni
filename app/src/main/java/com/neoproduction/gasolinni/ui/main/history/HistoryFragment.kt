@@ -31,9 +31,14 @@ class HistoryFragment : Fragment() {
         rv = view.findViewById(R.id.rvHistory)
         val layoutManager = LinearLayoutManager(view.context)
         rv.layoutManager = layoutManager
-        adapter = HistoryAdapter(requireContext().applicationContext, View.OnClickListener { item ->
-            vm.onHistoryItemClicked(requireContext(), item.tag as? Int)
-        })
+        adapter = HistoryAdapter(
+            requireContext().applicationContext,
+            onEditClickListener = View.OnClickListener { item ->
+                vm.onEditItem(requireContext(), item.tag as? Int)
+            },
+            onDeleteClickListener = View.OnClickListener { item ->
+                vm.onDeleteItem(item.tag as Int)
+            })
 
         rv.adapter = adapter
         rv.addItemDecoration(DividerItemDecoration(context, layoutManager.orientation))

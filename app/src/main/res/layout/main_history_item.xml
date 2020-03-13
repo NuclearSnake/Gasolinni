@@ -7,53 +7,63 @@
 
     <TextView
         android:id="@+id/tvTextAddress"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginLeft="8dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:ellipsize="middle"
+        android:singleLine="true"
+        android:textColor="#222"
+        android:textSize="24sp"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:text="Area 51b" />
+        app:layout_constraintTop_toBottomOf="@+id/ivEdit"
+        tools:text="Area 51b and a very long long name to read and see" />
 
     <TextView
         android:id="@+id/tvGpsLocation"
-        android:layout_width="wrap_content"
+        style="@style/small"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        app:layout_constraintStart_toStartOf="@+id/tvTextAddress"
-        app:layout_constraintTop_toBottomOf="@+id/tvTextAddress"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        app:layout_constraintBottom_toBottomOf="@+id/ivEdit"
+        app:layout_constraintEnd_toStartOf="@+id/tvDatetime"
+        app:layout_constraintStart_toEndOf="@+id/ivDelete"
+        app:layout_constraintTop_toTopOf="@+id/ivEdit"
         tools:text="48.1507646, 2.8443837" />
 
     <TextView
         android:id="@+id/tvDatetime"
+        style="@style/small"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toEndOf="@+id/tvTextAddress"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="@+id/ivEdit"
+        app:layout_constraintEnd_toStartOf="@+id/ivEdit"
+        app:layout_constraintTop_toTopOf="@+id/ivEdit"
         tools:text="10/03/20, 10:52 AM" />
 
     <TextView
         android:id="@+id/tvSupplier"
+        style="@style/normal"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:gravity="center"
         app:layout_constraintEnd_toStartOf="@+id/tvFuel"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintHorizontal_chainStyle="spread"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvGpsLocation"
+        app:layout_constraintTop_toBottomOf="@+id/tvTextAddress"
         tools:text="Luck" />
 
     <TextView
         android:id="@+id/tvFuel"
+        style="@style/normal"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:gravity="center"
@@ -65,6 +75,7 @@
 
     <TextView
         android:id="@+id/tvAmount"
+        style="@style/normal"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:gravity="center"
@@ -76,6 +87,7 @@
 
     <TextView
         android:id="@+id/tvPrice"
+        style="@style/normal"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:gravity="center"
@@ -84,5 +96,29 @@
         app:layout_constraintStart_toEndOf="@+id/tvAmount"
         app:layout_constraintTop_toTopOf="@+id/tvSupplier"
         tools:text="27.14$" />
+
+    <ImageView
+        android:id="@+id/ivDelete"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:contentDescription="@string/delete_item"
+        app:layout_constraintBottom_toBottomOf="@+id/ivEdit"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/ivEdit"
+        app:srcCompat="@drawable/ic_delete_forever_magenta_24dp" />
+
+    <ImageView
+        android:id="@+id/ivEdit"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:contentDescription="@string/edit_item"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ic_edit_blue_24dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

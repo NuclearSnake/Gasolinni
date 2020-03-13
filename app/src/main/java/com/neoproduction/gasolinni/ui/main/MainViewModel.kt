@@ -4,11 +4,14 @@ import android.app.Application
 import android.content.Context
 import android.content.Intent
 import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.viewModelScope
 import com.neoproduction.gasolinni.data.Repository
 import com.neoproduction.gasolinni.needSync
 import com.neoproduction.gasolinni.scheduleUpdateWorker
 import com.neoproduction.gasolinni.ui.edit.EditRefuelActivity
 import com.neoproduction.gasolinni.ui.edit.ITEM_ID
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class MainViewModel(app: Application) : AndroidViewModel(app) {
     private val repository = Repository.getInstance(app)
@@ -23,7 +26,10 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
 
     fun onFabClick(context: Context) = startEditActivity(context)
 
-    fun onHistoryItemClicked(context: Context, id: Int?) = startEditActivity(context, id)
+    fun onEditItem(context: Context, id: Int?) = startEditActivity(context, id)
+    fun onDeleteItem(id: Int) = viewModelScope.launch(Dispatchers.IO) {
+        repository.deleteRefuel(id)
+    }
 
     private fun startEditActivity(context: Context, id: Int? = null) {
         val intent = Intent(context, EditRefuelActivity::class.java)
