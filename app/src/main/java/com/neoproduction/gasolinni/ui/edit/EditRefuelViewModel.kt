@@ -73,7 +73,7 @@ class EditRefuelViewModel(app: Application) : AndroidViewModel(app) {
             val stationAddress = StationAddress(parsedFields.gps, parsedFields.address)
             val stationID = original?.stationID ?: findStationIdOrInsert(stationAddress)
 
-            val refuel = parsedFields.toRefuel(stationID, stationAddress, original?.id)
+            val refuel = parsedFields.toRefuel(stationID, stationAddress, original)
             val refuelID = if (refuel.id == 0)
                 repository.insertRefuel(refuel).toInt()
             else
@@ -126,12 +126,12 @@ class EditRefuelViewModel(app: Application) : AndroidViewModel(app) {
     private fun FieldsContainer.toRefuel(
         stationID: Int,
         stationAddress: StationAddress,
-        id: Int?
+        original: Refuel?
     ) = Refuel(
-        id ?: 0, // 0 stands for auto increment
+        original?.id ?: 0, // 0 stands for auto increment
         stationID,
         stationAddress,
-        System.currentTimeMillis(),
+        original?.timestamp ?: System.currentTimeMillis(),
         supplier,
         fuel,
         amount!!,
