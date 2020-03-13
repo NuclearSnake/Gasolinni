@@ -17,7 +17,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ui.edit.AddGasStationActivity"
+            android:name=".ui.edit.EditRefuelActivity"
             android:launchMode="singleInstance"
             android:windowSoftInputMode="adjustPan" />
     </application>

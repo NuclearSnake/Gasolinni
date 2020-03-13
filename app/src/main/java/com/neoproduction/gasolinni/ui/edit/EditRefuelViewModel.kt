@@ -1,6 +1,7 @@
 package com.neoproduction.gasolinni.ui.edit
 
 import android.app.Application
+import android.content.Intent
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -9,11 +10,15 @@ import com.neoproduction.gasolinni.data.Refuel
 import com.neoproduction.gasolinni.data.Repository
 import com.neoproduction.gasolinni.data.Station
 import com.neoproduction.gasolinni.data.StationAddress
+import com.neoproduction.gasolinni.toPriceInt
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class AddStationViewModel(app: Application) : AndroidViewModel(app) {
+const val ITEM_ID = "item_id"
+
+class EditRefuelViewModel(app: Application) : AndroidViewModel(app) {
     private val repository = Repository.getInstance(app)
+
     private val toastLD = MutableLiveData<String>()
     val toast: LiveData<String>
         get() = toastLD
@@ -26,20 +31,38 @@ class AddStationViewModel(app: Application) : AndroidViewModel(app) {
     val scheduleUpdate: LiveData<Boolean> // true for success, false for cancelled
         get() = scheduleUpdateLD
 
+    private val refuelToEditLD = MutableLiveData<Refuel?>()
+    val refuelToEdit: LiveData<Refuel?>
+        get() = refuelToEditLD
+
+    fun onActivityCreated(intent: Intent) = viewModelScope.launch(Dispatchers.IO) {
+        val id = intent.getIntExtra(ITEM_ID, -1)
+        if (id != -1) {
+            val refuels = repository.getRefuel(id)
+            if (refuels.isNotEmpty()) {
+                refuelToEditLD.postValue(refuels[0])
+                return@launch
+            }
+        }
+
+        refuelToEditLD.postValue(null)
+    }
 
     fun onDiscard() {
         finishLD.postValue(false)
     }
 
-    fun onSave(parsedFields: FieldsContainer) {
-        insertOrEditRefuel(parsedFields)
+    fun onSave(parsedFields: FieldsContainer, original: Refuel?) {
+        insertOrUpdateRefuel(parsedFields, original)
     }
+
+    // ------------- PRIVATE FUNCTIONS --------------
 
     private fun onStationsChange() {
         scheduleUpdateLD.postValue(true)
     }
 
-    private fun insertOrEditRefuel(parsedFields: FieldsContainer) =
+    private fun insertOrUpdateRefuel(parsedFields: FieldsContainer, original: Refuel?) =
         viewModelScope.launch(Dispatchers.IO) {
             val errorMsg = getErrorMessageOrNull(parsedFields)
             if (errorMsg != null) {
@@ -48,10 +71,15 @@ class AddStationViewModel(app: Application) : AndroidViewModel(app) {
             }
 
             val stationAddress = StationAddress(parsedFields.gps, parsedFields.address)
-            val stationID = findStationIdOrInsert(stationAddress)
-            val refuelID = insertRefuel(stationID, stationAddress, parsedFields).toInt()
+            val stationID = original?.stationID ?: findStationIdOrInsert(stationAddress)
 
-            // successful insert -> id should be some positive number
+            val refuel = parsedFields.toRefuel(stationID, stationAddress, original?.id)
+            val refuelID = if (refuel.id == 0)
+                repository.insertRefuel(refuel).toInt()
+            else
+                repository.updateRefuel(refuel)
+
+            // successful insert or update -> id should be some positive number
             if (refuelID == -1) {
                 toastLD.postValue("Error while saving data. Please try again later")
             } else {
@@ -95,19 +123,18 @@ class AddStationViewModel(app: Application) : AndroidViewModel(app) {
         return newId
     }
 
-    private fun insertRefuel(
-        stationID: Int, stationAddress: StationAddress,
-        fieldsContainer: FieldsContainer
-    ): Long = repository.insertRefuel(
-        Refuel(
-            0, // 0 stands for auto increment
-            stationID,
-            stationAddress,
-            System.currentTimeMillis(),
-            fieldsContainer.supplier,
-            fieldsContainer.fuel,
-            fieldsContainer.amount!!,
-            (fieldsContainer.price!! * 100).toInt()
-        )
+    private fun FieldsContainer.toRefuel(
+        stationID: Int,
+        stationAddress: StationAddress,
+        id: Int?
+    ) = Refuel(
+        id ?: 0, // 0 stands for auto increment
+        stationID,
+        stationAddress,
+        System.currentTimeMillis(),
+        supplier,
+        fuel,
+        amount!!,
+        price!!.toPriceInt()
     )
 }

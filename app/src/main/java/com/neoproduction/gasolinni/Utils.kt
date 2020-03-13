@@ -33,3 +33,9 @@ fun Context.setNeedSync(value: Boolean) {
 val Context.needSync: Boolean
     get() = getSharedPreferences(SHARED_PREFERENCE_FILE_NAME, Context.MODE_PRIVATE)
         .getBoolean(NEED_SYNC_KEY, false)
+
+fun Int.toStringPrice(context: Context) =
+    context.getString(R.string.placeh_price, this.toDoublePrice())
+
+fun Int.toDoublePrice() = this.toDouble() / 100
+fun Double.toPriceInt() = (this * 100).toInt()

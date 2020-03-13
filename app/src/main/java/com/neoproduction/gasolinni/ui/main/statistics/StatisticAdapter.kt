@@ -8,6 +8,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.neoproduction.gasolinni.R
 import com.neoproduction.gasolinni.data.StationStats
+import com.neoproduction.gasolinni.toStringPrice
 
 class StatisticAdapter(private val context: Context) :
     RecyclerView.Adapter<StatisticAdapter.StatisticViewHolder>() {
@@ -34,8 +35,7 @@ class StatisticAdapter(private val context: Context) :
         holder.tvTextAddress.text = station.text_address
         holder.tvGpsLocation.text = if (station.gps.isBlank()) "" else station.gps
         holder.tvAmount.text = context.getString(R.string.placeh_amount, station.amount)
-        holder.tvTotal.text =
-            context.getString(R.string.placeh_price, station.total.toDouble() / 100)
+        holder.tvTotal.text = station.total.toStringPrice(context)
     }
 
     class StatisticViewHolder(view: View) : RecyclerView.ViewHolder(view) {

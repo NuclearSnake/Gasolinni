@@ -9,8 +9,12 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.neoproduction.gasolinni.R
 import com.neoproduction.gasolinni.data.Refuel
+import com.neoproduction.gasolinni.toStringPrice
 
-class HistoryAdapter(private val context: Context) :
+class HistoryAdapter(
+    private val context: Context,
+    private val onClickListener: View.OnClickListener
+) :
     RecyclerView.Adapter<HistoryAdapter.HistoryViewHolder>() {
 
     private var refuels: List<Refuel> = listOf()
@@ -23,9 +27,7 @@ class HistoryAdapter(private val context: Context) :
         val view = LayoutInflater.from(parent.context)
             .inflate(R.layout.main_history_item, parent, false)
 
-        return HistoryViewHolder(
-            view
-        )
+        return HistoryViewHolder(view, onClickListener)
     }
 
     override fun getItemCount(): Int = refuels.size
@@ -33,8 +35,7 @@ class HistoryAdapter(private val context: Context) :
     override fun onBindViewHolder(holder: HistoryViewHolder, position: Int) {
         val refuel = refuels[position]
         holder.tvAmount.text = context.getString(R.string.placeh_amount, refuel.amount)
-        holder.tvPrice.text =
-            context.getString(R.string.placeh_price, refuel.price.toDouble() / 100)
+        holder.tvPrice.text = refuel.price.toStringPrice(context)
 
         holder.tvGpsLocation.text = if (refuel.stationAddress.gps.isBlank())
             ""
@@ -55,29 +56,23 @@ class HistoryAdapter(private val context: Context) :
 
         holder.tvSupplier.text = refuel.supplier
         holder.tvFuel.text = refuel.fuel
+
+        holder.itemView.tag = refuel.id // so that we can guess the item clicked then
     }
 
-    class HistoryViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        val tvGpsLocation: TextView = view.findViewById(
-            R.id.tvGpsLocation
-        )
-        val tvTextAddress: TextView = view.findViewById(
-            R.id.tvTextAddress
-        )
-        val tvSupplier: TextView = view.findViewById(
-            R.id.tvSupplier
-        )
-        val tvFuel: TextView = view.findViewById(
-            R.id.tvFuel
-        )
-        val tvDatetime: TextView = view.findViewById(
-            R.id.tvDatetime
-        )
-        val tvAmount: TextView = view.findViewById(
-            R.id.tvAmount
-        )
-        val tvPrice: TextView = view.findViewById(
-            R.id.tvPrice
-        )
+    class HistoryViewHolder(view: View, onClickListener: View.OnClickListener) :
+        RecyclerView.ViewHolder(view) {
+
+        val tvGpsLocation: TextView = view.findViewById(R.id.tvGpsLocation)
+        val tvTextAddress: TextView = view.findViewById(R.id.tvTextAddress)
+        val tvSupplier: TextView = view.findViewById(R.id.tvSupplier)
+        val tvFuel: TextView = view.findViewById(R.id.tvFuel)
+        val tvDatetime: TextView = view.findViewById(R.id.tvDatetime)
+        val tvAmount: TextView = view.findViewById(R.id.tvAmount)
+        val tvPrice: TextView = view.findViewById(R.id.tvPrice)
+
+        init {
+            view.setOnClickListener(onClickListener)
+        }
     }
 }

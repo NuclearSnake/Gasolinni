@@ -31,10 +31,10 @@ class HistoryFragment : Fragment() {
         rv = view.findViewById(R.id.rvHistory)
         val layoutManager = LinearLayoutManager(view.context)
         rv.layoutManager = layoutManager
-        adapter =
-            HistoryAdapter(
-                requireContext().applicationContext
-            )
+        adapter = HistoryAdapter(requireContext().applicationContext, View.OnClickListener { item ->
+            vm.onHistoryItemClicked(requireContext(), item.tag as? Int)
+        })
+
         rv.adapter = adapter
         rv.addItemDecoration(DividerItemDecoration(context, layoutManager.orientation))
 
