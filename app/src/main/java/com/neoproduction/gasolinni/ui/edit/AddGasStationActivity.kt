@@ -24,6 +24,7 @@ import kotlinx.android.synthetic.main.activity_add_gas_station.*
 class AddGasStationActivity : AppCompatActivity() {
     private val vm: AddStationViewModel by viewModels()
     private lateinit var mapboxMap: MapboxMap
+    private var coords: LatLng? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -50,7 +51,6 @@ class AddGasStationActivity : AppCompatActivity() {
             mapboxMap.addOnMapClickListener(::onMapClicked)
         }
 
-
         btnDiscard.setOnClickListener { vm.onDiscard() }
         btnSave.setOnClickListener { vm.onSave(parseFields()) }
 
@@ -67,6 +67,7 @@ class AddGasStationActivity : AppCompatActivity() {
     private fun onMapClicked(coords: LatLng): Boolean {
         tvGps.text = getString(R.string.placeh_gps, coords.latitude, coords.longitude)
         moveMarker(coords)
+        this.coords = coords
         return true
     }
 
@@ -80,7 +81,9 @@ class AddGasStationActivity : AppCompatActivity() {
     }
 
     private fun parseFields(): FieldsContainer {
-        val gps = tvGps.text.toString()
+        val finalCoords = coords
+        val gps =
+            if (finalCoords == null) "" else "${finalCoords.latitude} ${finalCoords.longitude}"
         val address = etAddress.text.toString()
         val supplier = etSupplier.text.toString()
         val fuel = etFuel.text.toString()
