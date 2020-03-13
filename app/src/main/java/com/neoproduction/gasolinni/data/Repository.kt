@@ -1,26 +1,20 @@
 package com.neoproduction.gasolinni.data
 
-import android.app.Application
+import android.content.Context
 
 class Repository private constructor(
-    app: Application,
-    private val firebaseManager: FirebaseManager = FirebaseManager(),
-    private val refuelDB: RefuelRoomDB = RefuelRoomDB.getDatabase(app),
+    appContext: Context,
+    private val refuelDB: RefuelRoomDB = RefuelRoomDB.getDatabase(appContext),
     private val refuelDao: RefuelDao = refuelDB.refuelDao(),
     private val stationDao: StationDao = refuelDB.stationDao()
 ) : RefuelDao by refuelDao, StationDao by stationDao {
-
-    fun updateFirebase() {
-        val stations = getStations()
-        firebaseManager.signInToFirebaseAndUpdate(stations)
-    }
 
     companion object {
         @Volatile
         private var INSTANCE: Repository? = null
 
         // Old good double-checked singleton
-        fun getInstance(app: Application): Repository {
+        fun getInstance(appContext: Context): Repository {
             val ins = INSTANCE
             if (ins != null)
                 return ins
@@ -30,7 +24,7 @@ class Repository private constructor(
                 if (ins2 != null)
                     return ins2
 
-                val insFinal = Repository(app)
+                val insFinal = Repository(appContext)
                 INSTANCE = insFinal
 
                 return insFinal

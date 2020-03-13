@@ -18,6 +18,8 @@ import com.mapbox.mapboxsdk.style.layers.PropertyFactory.*
 import com.mapbox.mapboxsdk.style.layers.SymbolLayer
 import com.mapbox.mapboxsdk.style.sources.GeoJsonSource
 import com.neoproduction.gasolinni.R
+import com.neoproduction.gasolinni.scheduleUpdateWorker
+import com.neoproduction.gasolinni.setNeedSync
 import kotlinx.android.synthetic.main.activity_add_gas_station.*
 
 
@@ -30,7 +32,7 @@ class AddGasStationActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         // Mapbox access token is configured here. This needs to be called either in your application
-        // object or in the same activity which contains the mapview.
+        // object or in the same activity which contains the map view.
         Mapbox.getInstance(this, MapboxInfo.token)
         setContentView(R.layout.activity_add_gas_station)
 
@@ -61,6 +63,11 @@ class AddGasStationActivity : AppCompatActivity() {
         vm.finish.observe(this, Observer { result ->
             setResult(if (result) Activity.RESULT_OK else Activity.RESULT_CANCELED)
             finish()
+        })
+
+        vm.scheduleUpdate.observe(this, Observer {
+            setNeedSync(true) // important!
+            scheduleUpdateWorker()
         })
     }
 

@@ -33,10 +33,13 @@ class FirebaseManager {
 
     private fun updateFirebaseDB(user: FirebaseUser, stations: List<Station>) {
         val db = Firebase.database.reference
-        Log.d("TEST", "setting value")
+        Log.d("TEST", "setting value...")
         db.child("users").child(user.uid).child("stations").setValue(stations)
             .addOnCompleteListener {
-                Log.d("TEST", "written data to the DB")
+                if (it.isSuccessful)
+                    Log.d("TEST", "written data to the DB")
+                else
+                    Log.d("TEST", "Error while writing to the DB")
             }
     }
 }

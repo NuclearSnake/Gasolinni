@@ -16,8 +16,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        mainFragmentStateAdapter =
-            MainFragmentStateAdapter(this)
+        mainFragmentStateAdapter = MainFragmentStateAdapter(this)
         pager.adapter = mainFragmentStateAdapter
 
         TabLayoutMediator(tab_layout, pager) { tab, position ->

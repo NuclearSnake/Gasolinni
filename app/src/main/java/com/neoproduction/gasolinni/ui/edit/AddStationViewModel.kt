@@ -22,6 +22,11 @@ class AddStationViewModel(app: Application) : AndroidViewModel(app) {
     val finish: LiveData<Boolean> // true for success, false for cancelled
         get() = finishLD
 
+    private val scheduleUpdateLD = MutableLiveData<Boolean>()
+    val scheduleUpdate: LiveData<Boolean> // true for success, false for cancelled
+        get() = scheduleUpdateLD
+
+
     fun onDiscard() {
         finishLD.postValue(false)
     }
@@ -30,8 +35,8 @@ class AddStationViewModel(app: Application) : AndroidViewModel(app) {
         insertOrEditRefuel(parsedFields)
     }
 
-    private fun onStationsChange() = viewModelScope.launch(Dispatchers.IO) {
-        repository.updateFirebase()
+    private fun onStationsChange() {
+        scheduleUpdateLD.postValue(true)
     }
 
     private fun insertOrEditRefuel(parsedFields: FieldsContainer) =
